@@ -1,0 +1,207 @@
+{% extends 'counterparties/base.html' %} 
+{% block content %}
+
+<form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Наименование контрагента</label>
+                {{ counterparty.name }}
+            </div>
+            <div class="form-group">
+                <label>Инн</label>
+                {{ counterparty.inn }}
+            </div>
+            <div class="form-group">
+            {% if counterparty.is_website %}
+            <label class="bg-success">
+            {% else %}
+            <label class="bg-danger">
+            {% endif %}
+                Вебсайт</label>
+                {{ counterparty.web_site }}
+            </div>
+
+            <div class="form-group">
+            {% if counterparty.risk == "STOP" %}<label class="bg-danger">Риск</label> стоп
+            {% elif  counterparty.risk == "DOP_FOCUS" %}<label class="bg-warning">Риск</label> Доп. фокус
+            {% else %}<label class="bg-success">Риск</label> Ок
+            {% endif %}
+            </div>
+            <div class="form-group">
+                <label>Последнее обновление</label>
+                {{ counterparty.с_time }}
+            </div>
+
+            <div class="form-group">
+                <h2>СПАРК</h2>
+            </div>
+            <div class="form-group">
+            {% if counterparty.reorganization_procedure == "STOP" %}<label class="bg-danger">Наличие процедуры реорганизации</label> Вывод активов, ликвидация
+            {% elif  counterparty.reorganization_procedure == "DOP_FOCUS" %}<label class="bg-warning">Наличие процедуры реорганизации</label> Дружественная (в форме присоединения компаний группы, укрупнение)
+            {% else %}<label class="bg-success">Наличие процедуры реорганизации</label> Отсутствует либо в форме изменения ОПФ (ОАО -АО)
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.change_participants == "STOP" %}<label class="bg-danger">Смена учредителей / участников</label> Смена
+            {% elif  counterparty.change_participants == "DOP_FOCUS" %}<label class="bg-warning">Смена учредителей / участников</label> Планируется
+            {% else %}<label class="bg-success">Смена учредителей / участников</label> Нет и не планируется
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.change_director == "STOP" %}<label class="bg-danger">Смена директора</label> Возникновение массового директора
+            {% elif  counterparty.change_director == "DOP_FOCUS" %}<label class="bg-warning">Смена директора</label> Планируется
+            {% else %}<label class="bg-success">Смена директора</label> Нет и не планируется
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.change_registration_address == "STOP" %}<label class="bg-danger">Смена адреса регистрации</label> Смена адреса на  массовый, уход в другой регион
+            {% elif  counterparty.change_registration_address == "DOP_FOCUS" %}<label class="bg-warning">Смена адреса регистрации</label> Планируется
+            {% else %}<label class="bg-success">Смена адреса регистрации</label> Нет и не планируется
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.change_constituent_documents == "STOP" %}<label class="bg-danger">Изменение в учредительных документах</label> Р 13001, новая редакция устава (полномочия, вынезение)
+            {% elif  counterparty.change_constituent_documents == "DOP_FOCUS" %}<label class="bg-warning">Изменение в учредительных документах</label> Р 13001,  не влияющие на полномочия приятия решений руковдителем и составом участников
+            {% else %}<label class="bg-success">Изменение в учредительных документах</label> нет
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.change_share_capital == "STOP" %}<label class="bg-danger">Изменение уставного капитала</label> Уменьшение
+            {% elif  counterparty.change_share_capital == "DOP_FOCUS" %}<label class="bg-warning">Изменение уставного капитала</label> Перераспределение долей
+            {% else %}<label class="bg-success">Изменение уставного капитала</label> Отсутствует либо увеличение
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.bankruptcy_procedure == "STOP" %}<label class="bg-danger">Наличие процедуры банкротства</label> Поданы иски, введена процедура банкротства
+            {% elif  counterparty.bankruptcy_procedure == "DOP_FOCUS" %}<label class="bg-warning">Наличие процедуры банкротства</label> Имеется сообщение кредитора о намерении подать заявление  о несостоятельности
+            {% else %}<label class="bg-success">Наличие процедуры банкротства</label> Отсутствует
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.presence_litigation == "STOP" %}<label class="bg-danger">Наличие судебных споров</label> Множество судебных споров в качестве ответчика либо на крупные суммы, либо с металлотрейдерами (более 30% от активов)
+            {% elif  counterparty.presence_litigation == "DOP_FOCUS" %}<label class="bg-warning">Наличие судебных споров</label> Множество судебных споров либо несколько на крупные суммы в качестве истца, ответчика
+            {% else %}<label class="bg-success">Наличие судебных споров</label> Нет, только по ТК
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.executive_documents == "STOP" %}<label class="bg-danger">Наличие исполнительных документов</label> Большое количество исполнительныз производство либо крупные исполнительные производства (более 30% от активов)
+            {% elif  counterparty.executive_documents == "DOP_FOCUS" %}<label class="bg-warning">Наличие исполнительных документов</label> Много, более 5% активов
+            {% else %}<label class="bg-success">Наличие исполнительных документов</label> Нет, только по ТК
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.unresolved_claims == "STOP" %}<label class="bg-danger">Неурегулированных претензий со стороны /к гос.органам</label> Иски от ИФНС, арест счетов, приостановление деятельности,  претензии на крупные суммы  ( > 30 % активов). Проверка по причине хищения гос.средств
+            {% elif  counterparty.unresolved_claims == "DOP_FOCUS" %}<label class="bg-warning">Неурегулированных претензий со стороны /к гос.органам</label> Просрочка налоговых платежей, есть предписания надзорных органов
+            {% else %}<label class="bg-success">Неурегулированных претензий со стороны /к гос.органам</label> Нет
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.credit_history == "STOP" %}<label class="bg-danger">Кредитная история  у контрагентов, поставщиков, заказчиков, в банках</label> Частые случаи просрочек, иски  на курпные суммы, иски от банка
+            {% elif  counterparty.credit_history == "DOP_FOCUS" %}<label class="bg-warning">Кредитная история  у контрагентов, поставщиков, заказчиков, в банках</label> Небольшие просрочки
+            {% else %}<label class="bg-success">Кредитная история  у контрагентов, поставщиков, заказчиков, в банках</label> Хорошая кредитная история
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.resizing_business == "STOP" %}<label class="bg-danger">Изменение уставного  капитала</label> Существенное сокращение выручки (более 30%), аномальный рост выручки (более 50%)
+            {% elif  counterparty.resizing_business == "DOP_FOCUS" %}<label class="bg-warning">Изменение уставного  капитала</label> Значительное  сокращение выручки (до 30%)
+            {% else %}<label class="bg-success">Изменение уставного  капитала</label> Рост, развитие
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.change_fixed_assets == "STOP" %}<label class="bg-danger">Изменение масштабов бизнеса</label> Резкое снижение основных фондов (производственных, складских)
+            {% elif  counterparty.change_fixed_assets == "DOP_FOCUS" %}<label class="bg-warning">Изменение масштабов бизнеса</label> Выбытие ОС и замена на арендованные площади
+            {% else %}<label class="bg-success">Изменение масштабов бизнеса</label> Расширение
+            {% endif %}
+            </div>
+
+            <div class="form-group">
+            {% if counterparty.change_debt_load == "STOP" %}<label class="bg-danger">Изменение долговой нагрузки: займы и кредиты</label> Резкое увеличение долговой нагрузки: кредиты и займы (более 30%)
+            {% elif  counterparty.change_debt_load == "DOP_FOCUS" %}<label class="bg-warning">Изменение долговой нагрузки: займы и кредиты</label> Увеличение долговой нагрузки: кредиты и займы (до  30%)
+            {% else %}<label class="bg-success">Изменение долговой нагрузки: займы и кредиты</label> Без существенных измнений
+            {% endif %}
+            </div>
+
+            <div class="form-group">
+                <h2>Результаты взаимодействия ком.службы</h2>
+            </div>
+
+
+            <div class="form-group">
+            {% if counterparty.changes_company_management == "STOP" %}<label class="bg-danger">Изменения в менедженте компаниии</label> Смена  команды
+            {% elif  counterparty.changes_company_management == "DOP_FOCUS" %}<label class="bg-warning">Изменения в менедженте компаниии</label> -----
+            {% else %}<label class="bg-success">Изменения в менедженте компаниии</label> Без существенных измнений
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.contact_phone_numbers == "STOP" %}<label class="bg-danger">Контактные телефоны</label> Недоступные контактные телефоны
+            {% elif  counterparty.contact_phone_numbers == "DOP_FOCUS" %}<label class="bg-warning">Контактные телефоны</label> Невнятные и неконструктивных комментарии при взаимодействии, необснованные обещания
+            {% else %}<label class="bg-success">Контактные телефоны</label> Доступны
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.interaction_Customers == "STOP" %}<label class="bg-danger">Взаимодействие с Заказчиками</label> Приоставновка финансирования проекта/заказа, существенное смещение сроков оплаты за выполненные работы, иски
+            {% elif  counterparty.interaction_Customers == "DOP_FOCUS" %}<label class="bg-warning">Взаимодействие с Заказчиками</label> Изменение схемы финансирования проектов, сроков выполнения. Расторжение ранее заключенных контрактов. 
+            {% else %}<label class="bg-success">Взаимодействие с Заказчиками</label> Нет негативной информации по работе с Заказчиками
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.itransfer_of_business == "STOP" %}<label class="bg-danger">Перевод бизнеса на другое юр.лицо</label> Выведение внеоборотных активов (перевод на другое юр.лицо)
+            {% elif  counterparty.transfer_of_business == "DOP_FOCUS" %}<label class="bg-warning">Перевод бизнеса на другое юр.лицо</label> Перераспределение заказов на другое юр.лицо, смещение закупки на другое юр.лицо 
+            {% else %}<label class="bg-success">Перевод бизнеса на другое юр.лицо</label> Нет изменений
+            {% endif %}
+            </div>
+            <div class="form-group">
+            {% if counterparty.changing_scope_activities == "STOP" %}<label class="bg-danger">Изменение сферы деятельности</label> Планируется резкая смена деятельности
+            {% elif  counterparty.changing_scope_activities == "DOP_FOCUS" %}<label class="bg-warning">Изменение сферы деятельности</label> Информация о развитии иных непрофильных проектов, направлений 
+            {% else %}<label class="bg-success">Изменение сферы деятельности</label> Нет изменений
+            {% endif %}
+            </div>
+
+            
+            <div class="form-group">
+                <h2>Новости</h2>
+            </div>
+            <div class="form-group">
+                {% for news in news_list %}
+                <div class="row">
+                    <div class="form-group">
+                        {% if news.customer_industry == "STOP" %}<label class="bg-danger">По отрасли клиента</label> Кризис в отрасли. Несоответствие компании "новым стандартам
+                        {% elif  news.customer_industry == "DOP_FOCUS" %}<label class="bg-warning">По отрасли клиента</label> Изменения законодательства.  Введение мер регулирования государством.
+                        {% else %}<label class="bg-success">По отрасли клиента</label> Стабильна, рост
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {% if news.management_company == "STOP" %}<label class="bg-danger">По менеджменту компании</label> Негативные отклики, проблемы у команды, менеджмента компании,  учредителей, негативные отклики на форумах работодателя («черный список работодателей»).  Смена собственника, директора, негативные отзывы о работодателе . Смерть учредителя.   
+                        {% elif  news.management_company == "DOP_FOCUS" %}<label class="bg-warning">По менеджменту компании</label> Губернаторский риск: компания под управлением приближенных к губернатору. Ключевые изменения в стратегии управления  компанией, проектами.
+                        {% else %}<label class="bg-success">По менеджменту компании</label> Хорошая репутация. Стабильные связи по проектам или   имеются связи с "приближенными к власти"
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {% if news.company_business == "STOP" %}<label class="bg-danger">По компании как бизнесу</label> Проблемы с проектами. Проблемы с крупным монопроектом.  Иск/иски   от банков.  Реестр недобросоветных поставщиков. Объявления о продаже производственных площадей на авито, др.специализированных сайтах
+                        {% elif  news.company_business == "DOP_FOCUS" %}<label class="bg-warning">По компании как бизнесу</label> Противоречивый новостной фон (проблемы у группы , у  одной из компаний группы, аффлированного банка)
+                        {% else %}<label class="bg-success">По компании как бизнесу</label> Хороший новостной фон по проектам. Новые инвестиционные проекты. Улучшения. Досрочные исполнения.
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {% if news.objects_projects == "STOP" %}<label class="bg-danger">По  объектам, проектам</label> Отрицательный новостной  фон, проблемы с проектами/объектами (проблемы с разрешениями на строительство, заморозка проекта, прекращение финансирования проекта), аварии
+                        {% elif  news.objects_projects == "DOP_FOCUS" %}<label class="bg-warning">Наличие процедуры реорганизации</label> Противоречивый новостной фон по объектам, проектам (проблемы с документацией,  изменение стоимости проекта, изменение схемы  финансирования проекта). Монопроект/монообъект
+                        {% else %}<label class="bg-success">По  объектам, проектам</label> Рост портфеля заказов,  проектов. Крупные проекты, анансированные в СМИ
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ news.news}}
+                    </div>
+                </div>
+                __________________________________________________
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <a href="{% url 'counterparties_list' %}" class="btn btn-info">К списку контрагентов</a>
+            </div>
+
+</form>
+
+
+
+
+{% endblock %}

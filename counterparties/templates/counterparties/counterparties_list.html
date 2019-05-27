@@ -1,0 +1,84 @@
+{% extends 'counterparties/base.html' %} 
+{% block content %}
+
+        
+        {% if c_list %} 
+        
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                    
+                    <td>
+                        <div class="form-group">
+                            <input type="inn" class="form-control" id="inputinn" placeholder="ИНН">
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <a class="text-info" href="">
+                            <span class="glyphicon glyphicon-plus-sign" style="font-size: 26px; cursor:pointer;"> </span>
+                        </a>
+                    </td>
+            </tr>
+            <tr>
+                <form action="" method="get">
+                    </br>
+                    
+                    <tr>
+                    
+                        <th><div class="form-group">
+                            <input type="name" class="form-control" id="inputname" placeholder="Наименование">
+                        </div></th>
+                        <th><div class="form-group">
+                            <input type="inn" class="form-control" id="inputinn" placeholder="ИНН">
+                        </div></th>
+                        <th><div class="form-group">
+                            <input type="site" class="form-control" id="inputsite" placeholder="Веб сайт">
+                        </div></th>
+                        <th><div class="form-group">
+                            <input type="risk" class="form-control" id="inputrisk" placeholder="Риск">
+                        </div></th>
+                        <th><div class="form-group">
+                            <input type="date" class="form-control" id="inputdate" placeholder="Дата изменения">
+                        </div></th>
+                        
+                        <th class="text-center" ><input class="btn btn-primary" type="submit" value="Фильтр" /></th>
+                    </tr>
+                </form>
+            </tr>
+                
+            </thead>
+            <tbody class="paleblue" id="new_calls"></tbody>
+            <tbody class="paleblue">
+                 
+                {% for counterparties in c_list %}
+                        {% if counterparties.risk == "STOP" %}<tr class="danger">
+                        {% elif  counterparties.risk == "DOP_FOCUS" %} <tr class="warning">
+                        {% else %}<tr class="success">
+                        {% endif %} 
+                        
+                            <td>{{ counterparties.name }}</td>
+                            <td>{{ counterparties.inn}}</td>
+                            <td>{{ counterparties.web_site}}</td>
+                            <td>
+                            {% if counterparties.risk == "STOP" %}стоп
+                            {% elif  counterparties.risk == "DOP_FOCUS" %}Доп. фокус
+                            {% else %}Ок
+                            {% endif %}
+                            </td>
+                            <td>{{ counterparties.с_time}}</td>
+                            <td class="text-center">
+                                <a class="text-info" href="{% url 'detail_counterparty' counterparties.id %}">
+                                    <span class="glyphicon glyphicon-list-alt" style="font-size: 16px; cursor:pointer;"> </span>
+                                </a>
+                            </td>
+                        </tr>
+                {% endfor %} 
+                        
+            </tbody>
+        </table>
+
+        
+       
+    
+         
+{% endif %} {% endblock %}
